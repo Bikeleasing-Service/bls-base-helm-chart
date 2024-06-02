@@ -40,6 +40,9 @@ serviceAccount:
 ###############################################
 securityContext: {}
 
+secrets:
+  required: true
+
 env: []
   # - name: ""
   #   value: ""
