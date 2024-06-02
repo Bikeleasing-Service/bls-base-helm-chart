@@ -1,0 +1,168 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Type of Workload
+# Possible values: backend / frontend / cronjob / task(job)
+workloadType: Backend
+# Environment
+environment: "int"
+replicaCount: 1
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+###############################################
+# Application IMAGE Information
+###############################################
+image:
+  repository: "" # repository path within bls's CICD ECR
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+
+###############################################
+# EKS information
+###############################################
+namespace: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using "serviceAccountName" helper
+  name: ""
+
+###############################################
+# Application secrets and Environment variable
+###############################################
+securityContext: {}
+
+env: []
+  # - name: ""
+  #   value: ""
+secretRef: []
+
+doppler:
+  project: ""
+  config: int
+  
+###############################################
+# ingress --> service:port --> container:port #
+###############################################
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 8080 # Port that the k8s service will use
+  protocol: TCP # Protocol to use
+  name: http # Name of the port to expose by the container
+  roleArn: ""
+
+ingress:
+  enabled: false
+  className: "nginx"
+  annotations: {}
+  tls: []
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+
+
+deployment:
+  strategy: RollingUpdate
+  port: 8080
+
+
+###############################################
+# container resource allocation
+###############################################
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 128Mi
+
+
+###############################################
+# Service Autoscaling
+###############################################
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+###############################################
+# Service healthcheck 
+###############################################
+livenessProbe:
+  path: /management/health
+  port: {{ .Values.deployment.port }}
+  
+readinessProbe:
+  path: /management/health
+  port: {{ .Values.deployment.port }}
+
+
+###############################################
+# Deployment optional setting
+###############################################
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+backoffLimit: 2
+
+
+
+
+
+
+
+############################# Additional settings based on requirement  #############
+#### setting backoffLimit
+# 
+# securityContext:
+#   {}
+#   # capabilities:
+#   #   drop:
+#   #   - ALL
+#   # readOnlyRootFilesystem: true
+#   # runAsNonRoot: true
+#   # runAsUser: 1000
+# datadog:
+#   enableDefaultConfig: true
+#   enableDefaultEnvironmentsVariables: true
+#   enableLogIngestion: true
+#   enableRuntimeMetrics: true
+#   enablelogAggregationRule:
+#     enabled: false
+# startupProbe:
+#   path: /api/health
+#   port: {{ .Values.deployment.port }}
+#revisionHistoryLimit: 4 # New default value
+#command: [] # command to run on container startup and override the entrypoint
+#args: [] # extra arguments to pass to the container entrypoint
+#initContainer: []
+#  image: "busybox"
+#  tag: "latest"
+#  command:
+#  - /bin/sh
+#  - -c
+#  - |
+#    while true; do
+#      sleep 60;
+#    done
+#  args: []

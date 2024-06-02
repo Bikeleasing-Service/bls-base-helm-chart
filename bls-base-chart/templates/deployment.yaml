@@ -1,0 +1,75 @@
+{{- if or (eq .Values.workloadType "Backend") (eq .Values.workloadType "Frontend") }}
+{{- $fullName := include "bls-base-chart.fullname" . -}}
+{{- $chart := include "bls-base-chart.chart" . -}}
+{{- $imageTag := .Values.image.tag | required ".Values.image.tag is required." -}}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ include "bls-base-chart.namespace" . }}
+  name: {{ include "bls-base-chart.fullname" . }}
+  labels:
+    {{- include "bls-base-chart.envTags" . | nindent 4 }}
+  annotations:
+    secrets.doppler.com/reload: 'true'
+spec:
+  strategy:
+    type: {{ .Values.deployment.strategy }}
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "bls-base-chart-chart.fullname" . }}
+  template:
+    metadata:
+      name: {{ include "bls-base-chart-chart.fullname" . }}
+      labels:
+        app: {{ include "bls-base-chart-chart.fullname" . }}
+        {{- include "bls-base-chart.envTags" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "bls-base-chart-chart.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ include "bls-base-chart-chart.fullname" . }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ $imageTag }}"
+          livenessProbe:
+            httpGet:
+              path: /management/health
+              port: {{ .Values.deployment.port }}
+          readinessProbe:
+            httpGet:
+              path: /management/health
+              port: {{ .Values.deployment.port }}
+          env:
+            {{- range .Values.env }}
+            - name: "{{ .name }}"
+              value: "{{ .value }}"
+            {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "bls-base-chart-chart.fullname" . }}
+            {{- range .Values.secretRef }}
+            - secretRef:
+                name: dopplersecret-{{ .Values.name }}
+          resources:
+            limits:
+              cpu: {{ .Values.resources.limits.cpu }}
+              memory: {{ .Values.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.resources.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
