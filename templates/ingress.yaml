@@ -1,6 +1,7 @@
 {{- if .Values.ingress }}
-{{- if .Values.ingress.enabled }}
-{{- $service_port := .Values.service.port -}}
+  {{- if .Values.ingress.enabled }}
+    {{- $name := .Values.name }}
+    {{- $service_port := .Values.service.port }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -8,26 +9,20 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     app: {{ .Values.name }}
-  annotations:
-    {{- with .Values.ingress.annotations }}
-    {{- toYaml . | nindent 4 }}
-    {{- end }}
 spec:
   rules:
     {{- range .Values.ingress.hosts }}
-    - host: {{ .host | quote }}
+    - host: {{ . }}
       http:
         paths:
-          {{- range .paths }}
-          - path: {{ .path }}
+          - path: /
             pathType: Prefix
             backend:
               service:
-                name: {{ $.Values.name }}
+                name: {{ $name }}
                 port:
                   number: {{ $service_port }}
-          {{- end }}
     {{- end }}
   ingressClassName: nginx
-{{- end }}
+  {{- end }}
 {{- end }}
