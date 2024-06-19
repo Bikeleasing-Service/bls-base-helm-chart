@@ -1,5 +1,6 @@
-{{- define "shared-lib.hpa" -}}
+{{- if .Values.autoscaling }}
 {{- if .Values.autoscaling.enabled }}
+
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
@@ -27,4 +28,4 @@ spec:
         targetAverageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}
     {{- end }}
 {{- end }}
-{{- end -}}
+{{- end }}
