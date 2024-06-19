@@ -1,23 +1,22 @@
 environment: "int"
 replicaCount: 1
-
+name: "demo"
+project: "demo"
 image:
   repository: "your-repo/image"
   pullPolicy: IfNotPresent
   tag: "latest"
 
-namespace: "your-namespace"
+namespace: "demo"
 
 serviceAccount:
   create: true
   annotations: {}
-  name: ""
-
-secrets:
-  required: true
+  name: "demo"
 
 doppler:
-  project: ""
+  required: false
+  project: "demo"
   config: int
   
 service:
@@ -26,7 +25,7 @@ service:
   port: 8080
   protocol: TCP
   name: http
-  roleArn: ""
+  roleArn: "demo"
 
 ingress:
   enabled: false
@@ -71,3 +70,8 @@ affinity: {}
 
 backoffLimit: 2
 
+env:
+  - name: SPRING_PROFILES_ACTIVE
+    value: stg
+  - name: JAVA_OPTS
+    value: -Xmx200m -Xms200m -XX:MaxMetaspaceSize=96m -XX:ReservedCodeCacheSize=128m

@@ -5,8 +5,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "bls-base-chart.fullname" . }}
-  namespace: {{ include "bls-base-chart.namespace" . }}
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
   labels:
     app: {{ .Values.name }}
   annotations:
@@ -21,7 +21,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "bls-base-chart.fullname" $ }}
+                name: {{ .Values.name }}
                 port:
                   number: {{ $service_port }}
     {{- end }}
