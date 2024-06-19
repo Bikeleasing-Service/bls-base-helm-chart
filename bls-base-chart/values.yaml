@@ -17,12 +17,12 @@ image:
   repository: ""  # repository path within bls's CICD ECR
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "latest"
 
 ###############################################
 # EKS information
 ###############################################
-namespace: ""
+namespace: "demo"
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -31,7 +31,7 @@ serviceAccount:
   annotations: {}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using "serviceAccountName" helper
-  name: ""
+  name: "demo"
 
 ###############################################
 # Application secrets and Environment variable
@@ -47,7 +47,7 @@ env: []
 secretRef: []
 
 doppler:
-  project: ""
+  project: "demo"
   config: int
   
 ###############################################
@@ -60,7 +60,7 @@ service:
   port: 8080  # Port that the k8s service will use
   protocol: TCP  # Protocol to use
   name: http  # Name of the port to expose by the container
-  roleArn: ""
+  roleArn: "demo"
 
 ingress:
   enabled: false
