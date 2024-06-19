@@ -1,66 +1,32 @@
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-# Type of Workload
-# Possible values: backend / frontend / cronjob / task(job)
-# Environment
 environment: "int"
 replicaCount: 1
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
 
-###############################################
-# Application IMAGE Information
-###############################################
 image:
-  repository: ""  # repository path within bls's CICD ECR
+  repository: "your-repo/image"
   pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
 
-###############################################
-# EKS information
-###############################################
-namespace: "demo"
+namespace: "your-namespace"
 
 serviceAccount:
-  # Specifies whether a service account should be created
   create: true
-  # Annotations to add to the service account
   annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using "serviceAccountName" helper
-  name: "demo"
-
-###############################################
-# Application secrets and Environment variable
-###############################################
-securityContext: {}
+  name: ""
 
 secrets:
   required: true
 
-env: []
-  # - name: ""
-  #   value: ""
-secretRef: []
-
 doppler:
-  project: "demo"
+  project: ""
   config: int
   
-###############################################
-# ingress --> service:port --> container:port #
-###############################################
-
 service:
   enabled: true
   type: ClusterIP
-  port: 8080  # Port that the k8s service will use
-  protocol: TCP  # Protocol to use
-  name: http  # Name of the port to expose by the container
-  roleArn: "demo"
+  port: 8080
+  protocol: TCP
+  name: http
+  roleArn: ""
 
 ingress:
   enabled: false
@@ -73,15 +39,9 @@ ingress:
         - path: /
           pathType: ImplementationSpecific
 
-
 deployment:
   strategy: RollingUpdate
   port: 8080
-
-
-###############################################
-# container resource allocation
-###############################################
 
 resources:
   limits:
@@ -91,37 +51,23 @@ resources:
     cpu: 250m
     memory: 128Mi
 
-
-###############################################
-# Service Autoscaling
-###############################################
 autoscaling:
   enabled: false
   minReplicas: 1
   maxReplicas: 2
   targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
 
-###############################################
-# Service healthcheck 
-###############################################
 livenessProbe:
   path: /management/health
-  port: {{ .Values.deployment.port }}
+  port: 8080
   
 readinessProbe:
   path: /management/health
-  port: {{ .Values.deployment.port }}
-
-
-###############################################
-# Deployment optional setting
-###############################################
+  port: 8080
 
 nodeSelector: {}
-
 tolerations: []
-
 affinity: {}
 
 backoffLimit: 2
+
