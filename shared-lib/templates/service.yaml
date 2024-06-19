@@ -1,3 +1,4 @@
+{{- define "shared-lib.serviceaccount" -}}
 {{- if .Values.service.enabled }}
 apiVersion: v1
 kind: Service
@@ -6,7 +7,7 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     app: {{ .Values.name }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+    {{- include "helm.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -16,4 +17,5 @@ spec:
       name: http
   selector:
     app: {{ .Values.name }}
+{{- end }}
 {{- end }}

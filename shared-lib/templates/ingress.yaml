@@ -1,7 +1,7 @@
-{{- if eq .Values.workloadType "Frontend" }}
-  {{- if and .Values.ingress.enabled .Values.service.enabled }}
-    {{- $service_port := .Values.service.port -}}
-
+{{- define "shared-lib.ingress" -}}
+{{- $chartName := include "helm.name" . -}}
+{{- if and .Values.ingress.enabled .Values.service.enabled }}
+  {{- $service_port := .Values.service.port -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -10,22 +10,25 @@ metadata:
   labels:
     app: {{ .Values.name }}
   annotations:
-    {{- toYaml .Values.ingress.annotations | nindent 4 }}
+    {{- with .Values.ingress.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   rules:
     {{- range .Values.ingress.hosts }}
-    - host: {{ . }}
+    - host: {{ .host | quote }}
       http:
         paths:
-          - path: /
+          {{- range .paths }}
+          - path: {{ .path }}
             pathType: Prefix
             backend:
               service:
-                name: {{ .Values.name }}
+                name: {{ $.Values.name }}
                 port:
                   number: {{ $service_port }}
+          {{- end }}
     {{- end }}
   ingressClassName: nginx
-  {{- end }}
 {{- end }}
-
+{{- end }}
