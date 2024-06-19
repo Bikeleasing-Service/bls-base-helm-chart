@@ -3,7 +3,6 @@
 
 # Type of Workload
 # Possible values: backend / frontend / cronjob / task(job)
-workloadType: Backend
 # Environment
 environment: "int"
 replicaCount: 1
@@ -15,11 +14,10 @@ fullnameOverride: ""
 # Application IMAGE Information
 ###############################################
 image:
-  repository: "" # repository path within bls's CICD ECR
+  repository: ""  # repository path within bls's CICD ECR
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
-
 
 ###############################################
 # EKS information
@@ -59,9 +57,9 @@ doppler:
 service:
   enabled: true
   type: ClusterIP
-  port: 8080 # Port that the k8s service will use
-  protocol: TCP # Protocol to use
-  name: http # Name of the port to expose by the container
+  port: 8080  # Port that the k8s service will use
+  protocol: TCP  # Protocol to use
+  name: http  # Name of the port to expose by the container
   roleArn: ""
 
 ingress:
@@ -127,45 +125,3 @@ tolerations: []
 affinity: {}
 
 backoffLimit: 2
-
-
-
-
-
-
-
-############################# Additional settings based on requirement  #############
-#### setting backoffLimit
-# 
-# securityContext:
-#   {}
-#   # capabilities:
-#   #   drop:
-#   #   - ALL
-#   # readOnlyRootFilesystem: true
-#   # runAsNonRoot: true
-#   # runAsUser: 1000
-# datadog:
-#   enableDefaultConfig: true
-#   enableDefaultEnvironmentsVariables: true
-#   enableLogIngestion: true
-#   enableRuntimeMetrics: true
-#   enablelogAggregationRule:
-#     enabled: false
-# startupProbe:
-#   path: /api/health
-#   port: {{ .Values.deployment.port }}
-#revisionHistoryLimit: 4 # New default value
-#command: [] # command to run on container startup and override the entrypoint
-#args: [] # extra arguments to pass to the container entrypoint
-#initContainer: []
-#  image: "busybox"
-#  tag: "latest"
-#  command:
-#  - /bin/sh
-#  - -c
-#  - |
-#    while true; do
-#      sleep 60;
-#    done
-#  args: []
