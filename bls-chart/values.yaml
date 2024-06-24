@@ -1,5 +1,5 @@
-environment: dev
-namespace: dev
+environment: ""
+namespace: ""
 name: "test"
 project: "test"
 
