@@ -9,6 +9,7 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     app: {{ .Values.name }}
+    app.kubernetes.io/managed-by: helm
 spec:
   rules:
     {{- range .Values.ingress.hosts }}

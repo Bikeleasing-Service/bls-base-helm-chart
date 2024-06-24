@@ -1,10 +1,31 @@
+autoscaling:
+  enabled: false
+
 serviceAccount:
   create: true
 
-deployment:
+ingress:
+  enabled: false
+
+resources:
+  limits:
+    cpu: 1.0
+    memory: 100Mi
+  requests:
+    cpu: 1.0
+    memory: 100Mi
+
+deployment:  
   strategy: RollingUpdate
 
 service:
   enabled: true
 
 securityContext: {}
+
+
+doppler:
+  required: true
+
+
+
