@@ -42,6 +42,7 @@ service:
   roleArn: arn:aws:iam::xxxx:role
   
 env: {}
+
 envFrom: {}
 
 securityContext: {}
