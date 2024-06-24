@@ -1,11 +1,28 @@
+environment: dev
+namespace: dev
+name: ""
+project: ""
+
+image:
+  repository: "" 
+  tag: ""
+
 autoscaling:
   enabled: false
+  minReplicas: 1
+  maxReplicas: 1
+  targetCPUUtilizationPercentage: 80
 
 serviceAccount:
   create: true
+  name: ""
+
+replicaCount: 1
 
 ingress:
   enabled: false
+  hosts:
+    - example.com
 
 resources:
   limits:
@@ -20,12 +37,34 @@ deployment:
 
 service:
   enabled: true
+  port: 80
+  roleArn: arn:aws:iam::xxxx:role
+  
+env: {}
+envFrom: {}
 
 securityContext: {}
-
+podSecurityContext: {}
 
 doppler:
-  required: true
+  required: false
+  project: bikelease
+  config: dev
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+livenessProbe:
+  path: /api/health
+  port: 8080
+readinessProbe:
+  path: /api/health
+  port: 8080
+
+
 
 
 
