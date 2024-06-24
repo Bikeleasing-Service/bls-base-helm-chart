@@ -2,9 +2,9 @@ apiVersion: v1
 entries:
   bls-chart:
   - apiVersion: v2
-    created: "2024-06-24T14:38:47.616237+02:00"
+    created: "2024-06-24T14:45:29.115936+02:00"
     description: A Helm chart for Kubernetes
-    digest: e12062793dd28a9ba4ec1af7846669eef56aeaad3d7a6a204adb157e8ed01d6b
+    digest: efbc2b6d0fdc73889e2a500d761a81345d2f5cc0852b0215bb10fc12b5d53dc0
     name: bls-chart
     type: application
     urls:
@@ -12,7 +12,7 @@ entries:
     version: 0.3.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-06-24T14:38:47.616041+02:00"
+    created: "2024-06-24T14:45:29.115727+02:00"
     description: A Helm chart for Kubernetes
     digest: 1a8e8fac2733d9e0689c871b426eac9f45101127bcec7e493354677ce0ca49d9
     name: bls-chart
@@ -22,7 +22,7 @@ entries:
     version: 0.2.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-06-24T14:38:47.615612+02:00"
+    created: "2024-06-24T14:45:29.115489+02:00"
     description: A Helm chart for Kubernetes
     digest: 93c763846da8e785f2d7f4a49426d3579a8b9e9d9cb2bbacc81f014e5b4ff197
     name: bls-chart
@@ -30,4 +30,4 @@ entries:
     urls:
     - https://bikeleasing-service.github.io/bls-base-helm-chart/bls-chart-0.1.0.tgz
     version: 0.1.0
-generated: "2024-06-24T14:38:47.614994+02:00"
+generated: "2024-06-24T14:45:29.114906+02:00"

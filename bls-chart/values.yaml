@@ -36,6 +36,7 @@ deployment:
   enabled: true
   strategy: RollingUpdate
 
+
 service:
   enabled: true
   port: 80
