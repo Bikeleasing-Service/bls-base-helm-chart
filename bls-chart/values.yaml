@@ -1,0 +1,10 @@
+serviceAccount:
+  create: true
+
+deployment:
+  strategy: RollingUpdate
+
+service:
+  enabled: true
+
+securityContext: {}
