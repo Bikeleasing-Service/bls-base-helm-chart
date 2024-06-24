@@ -1,4 +1,4 @@
-{{- if .Values.Deployment }}
+{{- if .Values.deployment.enabled }}
 {{- $imageTag := .Values.image.tag | required "Value is required for .Values.image.tag." -}}
 ---
 apiVersion: apps/v1
@@ -23,7 +23,7 @@ spec:
         app: {{ .Values.name }}
         {{- include "helm.envTags" . | nindent 8 }}
     spec:
-      serviceAccountName:  {{ .Values.name }}
+      serviceAccountName: {{ .Values.name }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -67,3 +67,4 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 {{- end }}
+

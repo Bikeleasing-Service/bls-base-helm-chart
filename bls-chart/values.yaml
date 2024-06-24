@@ -1,14 +1,14 @@
 environment: dev
 namespace: dev
-name: ""
-project: ""
+name: "test"
+project: "test"
 
 image:
-  repository: "" 
-  tag: ""
+  repository: "1242525:ecr" 
+  tag: "242442"
 
 autoscaling:
-  enabled: false
+  enabled: true
   minReplicas: 1
   maxReplicas: 1
   targetCPUUtilizationPercentage: 80
@@ -20,7 +20,7 @@ serviceAccount:
 replicaCount: 1
 
 ingress:
-  enabled: false
+  enabled: true
   hosts:
     - example.com
 
@@ -32,7 +32,8 @@ resources:
     cpu: 1.0
     memory: 100Mi
 
-deployment:  
+deployment:
+  enabled: true
   strategy: RollingUpdate
 
 service:
@@ -47,7 +48,7 @@ securityContext: {}
 podSecurityContext: {}
 
 doppler:
-  required: false
+  required: true
   project: bikelease
   config: dev
 
