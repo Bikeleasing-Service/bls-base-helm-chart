@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  bls-chart:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2024-06-24T10:10:42.929628+02:00"
+    description: A Helm chart for Kubernetes
+    digest: e2c01258ee949ff83787c07f6d963b2e9fb22c6f4ecfcadff52522f9ae5a6d40
+    name: bls-chart
+    type: application
+    urls:
+    - https://bikeleasing-service.github.io/bls-base-helm-chart/bls-chart-0.1.0.tgz
+    version: 0.1.0
+generated: "2024-06-24T10:10:42.929129+02:00"
