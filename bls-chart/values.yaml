@@ -3,9 +3,65 @@ namespace: ""
 name: "test"
 project: "test"
 
+serviceAccount:
+  create: true
+  name: "test"
+
+service:
+  enabled: true
+  port: 80
+  roleArn: arn:aws:iam::xxxx:role
+
+ingress:
+  enabled: false
+  hosts:
+    - example.com
+
 image:
   repository: "1242525:ecr" 
   tag: "242442"
+
+deployment:
+  enabled: true
+  strategy: RollingUpdate
+  replicaCount: 1
+  ports:
+    - name: http
+      internal: 8080
+      protocol: TCP
+  resources:
+    limits:
+      cpu: 1.0
+      memory: 100Mi
+    requests:
+      cpu: 1.0
+      memory: 100Mi
+  env: {}
+  envFrom: {}
+  command:
+    - /bin/sh
+    - -c
+    - echo Hello World
+  args: {}
+  
+  livenessProbe:
+    path: /api/health
+    port: 8080
+    failureThreshold: 30
+    periodSeconds: 10
+  readinessProbe:
+    path: /api/health
+    port: 8080
+    failureThreshold: 30
+    periodSeconds: 10
+  startupProbe:
+    path: "/startup"
+    port: 8080
+    failureThreshold: 30
+    periodSeconds: 10
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
 autoscaling:
   enabled: true
@@ -13,59 +69,13 @@ autoscaling:
   maxReplicas: 1
   targetCPUUtilizationPercentage: 80
 
-serviceAccount:
-  create: true
-  name: ""
-
-replicaCount: 1
-
-ingress:
-  enabled: true
-  hosts:
-    - example.com
-
-resources:
-  limits:
-    cpu: 1.0
-    memory: 100Mi
-  requests:
-    cpu: 1.0
-    memory: 100Mi
-
-deployment:
-  enabled: true
-  strategy: RollingUpdate
-
-
-service:
-  enabled: true
-  port: 80
-  roleArn: arn:aws:iam::xxxx:role
-  
-env: {}
-
-envFrom: {}
-
-securityContext: {}
-podSecurityContext: {}
-
 doppler:
   required: true
   project: bikelease
   config: dev
 
-nodeSelector: {}
 
-tolerations: []
 
-affinity: {}
-
-livenessProbe:
-  path: /api/health
-  port: 8080
-readinessProbe:
-  path: /api/health
-  port: 8080
 
 
 
