@@ -20,6 +20,7 @@ ingress:
 image:
   repository: "1242525:ecr" 
   tag: "242442"
+  imagePullPolicy: IfNotPresent
 
 deployment:
   enabled: true

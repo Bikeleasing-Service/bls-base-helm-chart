@@ -5,6 +5,8 @@ on:
   pull_request:
         types:
             - opened
+            - synchronize
+            - reopened
 jobs:
   lint-test:
     runs-on: ubuntu-latest
@@ -45,3 +47,6 @@ jobs:
       - name: Run chart-testing (install)
         run: ct install --target-branch main
         if: steps.list-changed.outputs.changed == 'true'
+
+
+
