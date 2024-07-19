@@ -32,7 +32,7 @@ spec:
       containers:
         - name: {{ .Values.name }}
           image: "{{ .Values.image.repository }}:{{ $imageTag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.image.imagePullPolicy }}
           {{- if .Values.command }}
           command:
             {{- toYaml .Values.deployment.command | nindent 12 }}
