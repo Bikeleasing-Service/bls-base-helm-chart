@@ -13,6 +13,7 @@ metadata:
   annotations:
     secrets.doppler.com/reload: 'true'
 spec:
+  replicas: {{ .Values.deployment.replicaCount }}
   strategy:
     type: {{ .Values.deployment.strategy }}
   selector:
@@ -27,20 +28,45 @@ spec:
         tags.datadoghq.com/service: {{ .Values.name }}
         tags.datadoghq.com/project: {{ .Values.project }}
     spec:
-      serviceAccountName: {{ .Values.name }}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
       containers:
         - name: {{ .Values.name }}
           image: "{{ .Values.image.repository }}:{{ $imageTag }}"
+          imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+          {{- if .Values.command }}
+          command:
+            {{- toYaml .Values.deployment.command | nindent 12 }}
+          {{- end }}
+          {{- if .Values.args }}
+          args:
+            {{- toYaml .Values.deployment.args | nindent 12 }}
+          {{- end }}
+          ports:
+            {{- range .Values.deployment.ports }}
+            - name: {{ .name }}
+              containerPort: {{ .internal }}
+              protocol: {{ .protocol | default "TCP" }}
+            {{- end }}
+          startupProbe:
+            httpGet:
+              path: {{ .Values.deployment.startupProbe.path }}
+              port: {{ .Values.deployment.startupProbe.port }}
+            failureThreshold: {{ .Values.deployment.startupProbe.failureThreshold }}
+            periodSeconds: {{ .Values.deployment.startupProbe.periodSeconds }}
           livenessProbe:
             httpGet:
-              path: {{ .Values.livenessProbe.path }}
-              port: {{ .Values.livenessProbe.port }}
+              path: {{ .Values.deployment.livenessProbe.path }}
+              port: {{ .Values.deployment.livenessProbe.port }}
+            failureThreshold: {{ .Values.deployment.livenessProbe.failureThreshold }}
+            periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
           readinessProbe:
             httpGet:
-              path: {{ .Values.readinessProbe.path }}
-              port: {{ .Values.readinessProbe.port }}
+              path: {{ .Values.deployment.readinessProbe.path }}
+              port: {{ .Values.deployment.readinessProbe.port }}
+            failureThreshold: {{ .Values.deployment.readinessProbe.failureThreshold }}
+            periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
           env:
-            {{- range .Values.env }}
+            {{- range .Values.deployment.env }}
             - name: "{{ .name }}"
               value: "{{ .value }}"
             {{- end }}
@@ -49,20 +75,20 @@ spec:
                 name: dopplersecret-{{ .Values.name }}
           resources:
             limits:
-              cpu: {{ .Values.resources.limits.cpu }}
-              memory: {{ .Values.resources.limits.memory }}
+              cpu: {{ .Values.deployment.resources.limits.cpu }}
+              memory: {{ .Values.deployment.resources.limits.memory }}
             requests:
-              cpu: {{ .Values.resources.requests.cpu }}
-              memory: {{ .Values.resources.requests.memory }}
-      {{- with .Values.nodeSelector }}
+              cpu: {{ .Values.deployment.resources.requests.cpu }}
+              memory: {{ .Values.deployment.resources.requests.memory }}
+      {{- with .Values.deployment.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.deployment.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.deployment.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
