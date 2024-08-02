@@ -44,7 +44,7 @@ spec:
           ports:
             {{- range .Values.deployment.ports }}
             - name: {{ .name }}
-              containerPort: {{ .internal }}
+              containerPort: {{ .containerPort }}
               protocol: {{ .protocol | default "TCP" }}
             {{- end }}
           startupProbe:

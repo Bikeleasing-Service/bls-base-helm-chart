@@ -1,5 +1,5 @@
 {{- if .Values.service }}
-{{- if .Values.service.enabled }}
+  {{- if .Values.service.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -11,11 +11,13 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: {{ .Values.service.port }}
-      protocol: {{ .Values.service.protocol }}
-      name: http
+    {{- range .Values.service.ports }}
+    - name: {{ .name }}
+      port: {{ .port }}
+      targetPort: {{ .targetPort }}
+      protocol: {{ .protocol }}
+    {{- end }}
   selector:
     app: {{ .Values.name }}
-{{- end }}
+  {{- end }}
 {{- end }}
