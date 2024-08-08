@@ -2,7 +2,16 @@ apiVersion: v1
 entries:
   bls-chart:
   - apiVersion: v2
-    created: "2024-08-08T15:10:40.742189+02:00"
+    created: "2024-08-08T17:11:04.44341+02:00"
+    description: A Helm chart for Kubernetes
+    digest: eb403fd117c81bd4dcae3fa0a4ce8a06b90b305e02e1786138d880b9969a7d8a
+    name: bls-chart
+    type: application
+    urls:
+    - https://bikeleasing-service.github.io/bls-base-helm-chart/bls-chart-0.6.0.tgz
+    version: 0.6.0
+  - apiVersion: v2
+    created: "2024-08-08T17:11:04.442869+02:00"
     description: A Helm chart for Kubernetes
     digest: b0094da0f473821f2222ca3767dabcdb74486378543f5d7b6a223597bd815766
     name: bls-chart
@@ -11,7 +20,7 @@ entries:
     - https://bikeleasing-service.github.io/bls-base-helm-chart/bls-chart-0.5.0.tgz
     version: 0.5.0
   - apiVersion: v2
-    created: "2024-08-08T15:10:40.74162+02:00"
+    created: "2024-08-08T17:11:04.442245+02:00"
     description: A Helm chart for Kubernetes
     digest: dced4b86ac654f7f571f657ac5671c1b5fbb2cfeac99cbb13fb71b225ed12c27
     name: bls-chart
@@ -20,7 +29,7 @@ entries:
     - https://bikeleasing-service.github.io/bls-base-helm-chart/bls-chart-0.4.0.tgz
     version: 0.4.0
   - apiVersion: v2
-    created: "2024-08-08T15:10:40.74088+02:00"
+    created: "2024-08-08T17:11:04.441393+02:00"
     description: A Helm chart for Kubernetes
     digest: e1713a48f897fa5230571c88aebdc73cb241c68bd9813cfd451b124aa110dac5
     name: bls-chart
@@ -30,7 +39,7 @@ entries:
     version: 0.3.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-08-08T15:10:40.740198+02:00"
+    created: "2024-08-08T17:11:04.440513+02:00"
     description: A Helm chart for Kubernetes
     digest: 1a8e8fac2733d9e0689c871b426eac9f45101127bcec7e493354677ce0ca49d9
     name: bls-chart
@@ -40,7 +49,7 @@ entries:
     version: 0.2.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-08-08T15:10:40.739465+02:00"
+    created: "2024-08-08T17:11:04.439726+02:00"
     description: A Helm chart for Kubernetes
     digest: 93c763846da8e785f2d7f4a49426d3579a8b9e9d9cb2bbacc81f014e5b4ff197
     name: bls-chart
@@ -48,4 +57,4 @@ entries:
     urls:
     - https://bikeleasing-service.github.io/bls-base-helm-chart/bls-chart-0.1.0.tgz
     version: 0.1.0
-generated: "2024-08-08T15:10:40.738567+02:00"
+generated: "2024-08-08T17:11:04.438237+02:00"
