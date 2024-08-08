@@ -1,0 +1,21 @@
+{{- if .Values.service }}
+{{- if .Values.service.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.name }}
+    app.kubernetes.io/managed-by: helm
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.port }}
+      protocol: {{ .Values.service.protocol }}
+      name: http
+  selector:
+    app: {{ .Values.name }}
+{{- end }}
+{{- end }}
