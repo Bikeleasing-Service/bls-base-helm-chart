@@ -1,5 +1,5 @@
-environment: ""
-namespace: ""
+environment: "dev"
+namespace: "test"
 name: "test"
 project: "test"
 
@@ -15,19 +15,21 @@ service:
     - name: http
       port: 80
       targetPort: 8080
-      protocol: tcp
+      protocol: TCP
     - name: http
       port: 443
       targetPort: 8443
-      protocol: tcp
-
-  
-
+      protocol: TCP
 
 ingress:
-  enabled: false
+  enabled: true
   hosts:
     - example.com
+  paths:
+    - path: /
+      pathType: Prefix
+      servicePort: 80
+
 
 image:
   repository: "1242525:ecr" 

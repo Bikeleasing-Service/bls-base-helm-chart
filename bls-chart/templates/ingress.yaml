@@ -1,29 +1,35 @@
 {{- if .Values.ingress }}
   {{- if .Values.ingress.enabled }}
-    {{- $name := .Values.name }}
-    {{- $service_port := .Values.service.port }}
+    {{- $ingressPaths := .Values.ingress.paths -}}
+    {{- $name := .Values.name -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Values.name }}
+  name: {{ $name }}
+  {{- if .Values.namespace }}
   namespace: {{ .Values.namespace }}
+  {{- end }}
   labels:
     app: {{ .Values.name }}
     app.kubernetes.io/managed-by: helm
 spec:
+  ingressClassName: nginx
   rules:
     {{- range .Values.ingress.hosts }}
     - host: {{ . }}
       http:
         paths:
-          - path: /
-            pathType: Prefix
+        {{- range $ingressPaths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
             backend:
               service:
                 name: {{ $name }}
                 port:
-                  number: {{ $service_port }}
+                  number: {{ .servicePort }}
+          {{- end }}
     {{- end }}
-  ingressClassName: nginx
-  {{- end }}
 {{- end }}
+{{- end }}
+
+
