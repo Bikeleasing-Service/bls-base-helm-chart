@@ -9,8 +9,20 @@ serviceAccount:
 
 service:
   enabled: true
-  port: 80
+  type: ClusterIP
   roleArn: arn:aws:iam::xxxx:role
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+      protocol: tcp
+    - name: http
+      port: 443
+      targetPort: 8443
+      protocol: tcp
+
+  
+
 
 ingress:
   enabled: false
@@ -28,7 +40,10 @@ deployment:
   replicaCount: 1
   ports:
     - name: http
-      internal: 8080
+      containerPort: 8080
+      protocol: TCP
+    - name: https
+      containerPort: 8443
       protocol: TCP
   resources:
     limits:
