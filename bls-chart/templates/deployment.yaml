@@ -52,18 +52,21 @@ spec:
               path: {{ .Values.deployment.startupProbe.path }}
               port: {{ .Values.deployment.startupProbe.port }}
             failureThreshold: {{ .Values.deployment.startupProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.deployment.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.deployment.startupProbe.periodSeconds }}
           livenessProbe:
             httpGet:
               path: {{ .Values.deployment.livenessProbe.path }}
               port: {{ .Values.deployment.livenessProbe.port }}
             failureThreshold: {{ .Values.deployment.livenessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
           readinessProbe:
             httpGet:
               path: {{ .Values.deployment.readinessProbe.path }}
               port: {{ .Values.deployment.readinessProbe.port }}
             failureThreshold: {{ .Values.deployment.readinessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
           env:
             {{- range .Values.deployment.env }}
