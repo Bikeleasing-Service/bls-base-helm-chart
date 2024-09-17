@@ -67,16 +67,19 @@ deployment:
     port: 8080
     failureThreshold: 30
     periodSeconds: 10
+    initialDelaySeconds: 0
   readinessProbe:
     path: /api/health
     port: 8080
     failureThreshold: 30
     periodSeconds: 10
+    initialDelaySeconds: 0
   startupProbe:
     path: "/startup"
     port: 8080
     failureThreshold: 30
     periodSeconds: 10
+    initialDelaySeconds: 0
   nodeSelector: {}
   tolerations: []
   affinity: {}
