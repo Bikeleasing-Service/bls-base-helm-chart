@@ -33,11 +33,11 @@ spec:
         - name: {{ .Values.name }}
           image: "{{ .Values.image.repository }}:{{ $imageTag }}"
           imagePullPolicy: {{ .Values.image.imagePullPolicy }}
-          {{- if .Values.command }}
+          {{- if .Values.deployment.command }}
           command:
             {{- toYaml .Values.deployment.command | nindent 12 }}
           {{- end }}
-          {{- if .Values.args }}
+          {{- if .Values.deployment.args }}
           args:
             {{- toYaml .Values.deployment.args | nindent 12 }}
           {{- end }}
