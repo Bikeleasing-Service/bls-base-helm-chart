@@ -74,6 +74,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v4
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
