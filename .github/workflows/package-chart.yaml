@@ -1,0 +1,123 @@
+name: Release Helm Chart
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-version:
+    name: Update Chart Version
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Git
+      run: |
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "GitHub Actions Bot"
+
+    - name: Bump version based on commit message
+      id: version
+      run: |
+        VERSION=$(cat bls-chart/Chart.yaml | grep version | cut -d ' ' -f 2)
+        NEW_VERSION=$(echo "${VERSION%.*}.$((${VERSION##*.}+1))")
+        echo "New version: $NEW_VERSION"
+        sed -i "s/^version:.*/version: $NEW_VERSION/" bls-chart/Chart.yaml
+        echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
+        git commit -am "chore: bump chart version to $NEW_VERSION"
+        git push origin main
+
+    - name: Create Git Tag
+      run: |
+        git tag "v${{ env.new_version }}"
+        git push origin --tags
+
+  changelog:
+    name: Generate Changelog
+    needs: update-version
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Generate Changelog
+      uses: TriPSs/conventional-changelog-action@v5
+      id: changelog
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        git-user-name: "github-actions[bot]"
+        git-user-email: "github-actions[bot]@users.noreply.github.com"
+        output-file: CHANGELOG.md
+        skip-git-pull: true
+        create-summary: true
+          
+    - name: Commit Changelog
+      run: |
+        git add CHANGELOG.md
+        git commit -m "chore: update changelog for version ${{ env.new_version }}"
+        git push origin main
+
+  create-release:
+    name: Create GitHub Release
+    needs: [update-version, changelog]
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: "v${{ env.new_version }}"
+        name: "v${{ env.new_version }}"
+        body: |
+          <details>
+            <summary>Changelog</summary>
+
+            ${{ steps.changelog.outputs.clean_changelog }}
+
+          </details>
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+  package-helm-chart:
+    name: Package Helm Chart
+    needs: create-release
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Package Helm chart
+      run: |
+        helm package bls-chart
+        mv *.tgz ./docs/
+
+    - name: Update Helm index
+      run: |
+        helm repo index ./docs --url https://bikeleasing-service.github.io/bls-base-helm-chart/
+        git add docs/
+        git commit -m "Update Helm repo index for version v${{ env.new_version }}"
+        git push origin main
+
+  publish-chart:
+    name: Publish Helm Chart to GitHub Pages
+    needs: package-helm-chart
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Publish Helm chart
+      uses: stefanprodan/helm-gh-pages@master
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        charts_dir: docs
+        charts_url: https://bikeleasing-service.github.io/bls-base-helm-chart/
+        branch: gh-pages
