@@ -60,8 +60,7 @@ deployment:
     - /bin/sh
     - -c
     - echo Hello World
-  args: {}
-     
+  args: {} 
   livenessProbe:
     path: /api/health
     port: 8080
