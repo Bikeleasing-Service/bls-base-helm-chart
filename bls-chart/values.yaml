@@ -23,6 +23,7 @@ service:
 
 ingress:
   enabled: true
+  className: traefik
   hosts:
     - example.com
   paths:

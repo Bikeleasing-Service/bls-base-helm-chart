@@ -13,7 +13,7 @@ metadata:
     app: {{ .Values.name }}
     app.kubernetes.io/managed-by: helm
 spec:
-  ingressClassName: nginx
+  ingressClassName: {{ .Values.ingress.className }}
   rules:
     {{- range .Values.ingress.hosts }}
     - host: {{ . }}
